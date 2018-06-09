@@ -16,11 +16,11 @@
             android:id="@+id/car_button"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:background="#1B7EFF"
-            android:padding="10dp"
             android:layout_marginBottom="30dp"
-            android:textColor="#FFFFFF"
+            android:background="@android:color/holo_green_dark"
+            android:padding="10dp"
             android:text="Car User"
+            android:textColor="#FFFFFF"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="73dp" />
 
@@ -28,11 +28,11 @@
             android:id="@+id/truck_button"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:background="#1B7EFF"
-            android:padding="10dp"
             android:layout_marginBottom="30dp"
-            android:textColor="#FFFFFF"
+            android:background="@android:color/holo_green_dark"
+            android:padding="10dp"
             android:text="Truck User"
+            android:textColor="#FFFFFF"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="141dp" />
 
@@ -40,11 +40,11 @@
             android:id="@+id/rmc_button"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:background="#1B7EFF"
-            android:padding="10dp"
             android:layout_marginBottom="150dp"
-            android:textColor="#FFFFFF"
+            android:background="@android:color/holo_green_dark"
+            android:padding="10dp"
             android:text="Road Maintenance Contractor"
+            android:textColor="#FFFFFF"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="203dp" />
     </LinearLayout>
