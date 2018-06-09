@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent serviceIntent = new Intent(this, AccelerometerService.class);
+        startService(serviceIntent);
 
         car = (Button)findViewById(R.id.car_button);
         truck = (Button)findViewById(R.id.truck_button);
