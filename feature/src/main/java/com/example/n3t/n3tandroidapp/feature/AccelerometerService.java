@@ -1,17 +1,38 @@
 package com.example.n3t.n3tandroidapp.feature;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
+import android.app.VoiceInteractor;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.widget.TextView;
+import java.util.Calendar;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.intentfilter.androidpermissions.PermissionManager;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +40,11 @@ import org.json.JSONObject;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Collections.singleton;
 
 
 public class AccelerometerService extends Service implements SensorEventListener{
@@ -29,7 +55,10 @@ public class AccelerometerService extends Service implements SensorEventListener
     private double y = 0;
     private double z = 0;
     private String urlString = "https://n3t-portal.herokuapp.com/postDataLocation";
-    private String urlTest = "https://putsreq.com/2fA9VrFFapnwP2gqF0XV";
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private Location location;
 
     public AccelerometerService() {
     }
@@ -46,6 +75,26 @@ public class AccelerometerService extends Service implements SensorEventListener
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
         sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {}
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) { }
+
+            @Override
+            public void onProviderEnabled(String provider) { }
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
+
+        try {
+            locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
+        } catch (SecurityException e) {}
+
         Log.i("onStartCommand", "Service started");
 
         Runnable r = new Runnable() {
@@ -80,42 +129,50 @@ public class AccelerometerService extends Service implements SensorEventListener
     private void sendUpdates(JSONObject jsonObject) {
         Log.i("accelerometer", x + " " + y + " " + z);
 
-        try {
-            URL url = new URL(urlString);
-            //URL url = new URL(urlTest);
+        RequestQueue q = Volley.newRequestQueue(this);
+        Response.Listener<JSONObject> success = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("http", "got response");
+            }
+        };
+        Response.ErrorListener failure = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("http", "no response");
+            }
+        };
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setDoOutput(true);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, urlString, jsonObject, success, failure);
+        q.add(req);
 
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            httpURLConnection.connect();
-
-            DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-            Log.i("JSON", jsonObject.toString());
-            wr.writeBytes(jsonObject.toString());
-            wr.flush();
-            wr.close();
-        } catch(Exception e) {
-            Log.i("Http post", e.toString());
-        }
     }
 
     private JSONObject makeJsonObject(double x, double y, double z) {
         JSONObject o = new JSONObject();
         try {
+            Date currentTime = Calendar.getInstance().getTime();
+            try {
+                location = locationManager.getLastKnownLocation("gps");
+            } catch (SecurityException e){}
             o.put("IMU_x", x);
             o.put("IMU_y", y);
             o.put("IMU_z", z);
-            o.put("dateTime", "2018-09-06T23:43:51.000Z");
+            o.put("dateTime", currentTime); //2018-09-06T23:43:51.000Z
             o.put("humidity", "-100");
             o.put("barometricPressure", "-100");
-            o.put("longitude", "21");
-            o.put("latitude", "21");
+            if (location == null){
+                o.put("longitude", "-100");
+                o.put("latitude", "-100");
+            } else {
+                o.put("longitude", location.getLongitude());
+                o.put("latitude", location.getLatitude());
+            }
             o.put("temperature", "-100");
             o.put("windSpeed", "-100");
             o.put("photo", "");
             o.put("id", 0);
+            Log.i("JSON", o.toString());
 
         } catch (JSONException e) {
             Log.i("json", e.toString());

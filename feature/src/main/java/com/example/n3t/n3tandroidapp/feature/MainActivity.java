@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.intentfilter.androidpermissions.PermissionManager;
+
+import static java.util.Collections.singleton;
+
 public class MainActivity extends AppCompatActivity {
 
     Button car, truck, rmc;
@@ -20,6 +24,75 @@ public class MainActivity extends AppCompatActivity {
 
         Intent serviceIntent = new Intent(this, AccelerometerService.class);
         startService(serviceIntent);
+
+        PermissionManager permissionManager = PermissionManager.getInstance(this);
+        permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+        permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_COARSE_LOCATION), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+        permissionManager.checkPermissions(singleton(Manifest.permission.INTERNET), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+        permissionManager.checkPermissions(singleton(Manifest.permission.RECORD_AUDIO), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+        permissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+        permissionManager.checkPermissions(singleton(Manifest.permission.CAMERA), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+
 
         car = (Button)findViewById(R.id.car_button);
         truck = (Button)findViewById(R.id.truck_button);
