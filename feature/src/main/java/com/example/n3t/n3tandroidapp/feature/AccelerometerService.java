@@ -29,8 +29,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     private double y = 0;
     private double z = 0;
     private String urlString = "https://n3t-portal.herokuapp.com/postDataLocation";
-    private String urlTest = "";
-    private String jsonTest = "{\n\"IMU_x\":\"123\",\n\"IMU_y\":\"12\"\"IMU_z\":\"1\",\n\"dateTime\":\"9/6\",\n\"barometricPressure\":\"\",\n\"longitude\":\"50\",\n\"latitude\":\"51\",\n\"temperature\":\"\",\n\"windSpeed\":\"\",\n\"photo\":\"\",\n\"id\":\"123\"\n}";
+    private String urlTest = "https://putsreq.com/2fA9VrFFapnwP2gqF0XV";
 
     public AccelerometerService() {
     }
@@ -87,15 +86,13 @@ public class AccelerometerService extends Service implements SensorEventListener
 
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
 
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-            httpURLConnection.setRequestProperty("Accept","application/json");
             httpURLConnection.connect();
 
             DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-            //Log.i("JSON", jsonObject.toString());
+            Log.i("JSON", jsonObject.toString());
             wr.writeBytes(jsonObject.toString());
             wr.flush();
             wr.close();
@@ -110,14 +107,15 @@ public class AccelerometerService extends Service implements SensorEventListener
             o.put("IMU_x", x);
             o.put("IMU_y", y);
             o.put("IMU_z", z);
-            o.put("dateTime", "");
-            o.put("barometricPressure", "");
-            o.put("longitude", "");
-            o.put("latitude", "");
-            o.put("temperature", "");
-            o.put("windspeed", "");
+            o.put("dateTime", "2018-09-06T23:43:51.000Z");
+            o.put("humidity", "-100");
+            o.put("barometricPressure", "-100");
+            o.put("longitude", "21");
+            o.put("latitude", "21");
+            o.put("temperature", "-100");
+            o.put("windSpeed", "-100");
             o.put("photo", "");
-            o.put("id", 5);
+            o.put("id", 0);
 
         } catch (JSONException e) {
             Log.i("json", e.toString());
