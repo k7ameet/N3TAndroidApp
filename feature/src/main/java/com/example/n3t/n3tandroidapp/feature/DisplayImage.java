@@ -21,11 +21,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -47,11 +49,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class DisplayImage extends Activity implements SensorEventListener {
+public class DisplayImage extends Activity  {
 
-    private Sensor sensor;
-    private SensorManager sm;
-    private String urlString = "https://n3t-portal.herokuapp.com/postDataLocationFile";
+    private String urlString = "https://n3t-portal.herokuapp.com/postDataLocation";
     private Handler mWaitHandler = new Handler();
 
     private LocationManager locationManager;
@@ -59,6 +59,7 @@ public class DisplayImage extends Activity implements SensorEventListener {
     private Location location;
 
     private Bitmap rotatedImage;
+    private String encodedImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +67,7 @@ public class DisplayImage extends Activity implements SensorEventListener {
         setContentView(R.layout.activity_display_image);
         Image image = Camera.imageTempStore;
 
-        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -108,6 +107,10 @@ public class DisplayImage extends Activity implements SensorEventListener {
             rotatedImage = Bitmap.createBitmap(bitmapImage ,0 ,0 ,bitmapImage.getWidth() ,bitmapImage.getHeight() ,matrix ,true);
             ((ImageView)findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
         }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
+        byte[] imageBytes = baos.toByteArray();
+        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
         location = locationManager.getLastKnownLocation("gps");
         Date time = Calendar.getInstance().getTime();
@@ -160,9 +163,8 @@ public class DisplayImage extends Activity implements SensorEventListener {
     }
 
     private void sendUpdates(JSONObject jsonObject) {
-        Log.i("send updates", Camera.x1 + " " + Camera.y1 + " " + Camera.z1);
 
-        /*RequestQueue q = Volley.newRequestQueue(this);
+        RequestQueue q = Volley.newRequestQueue(this);
         Response.Listener<JSONObject> success = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -172,79 +174,22 @@ public class DisplayImage extends Activity implements SensorEventListener {
         Response.ErrorListener failure = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("no photo response", error.toString());
+                Log.i("NOOOOOOOOOOOOOOOOOOO", error.toString());
             }
         };
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, urlString, jsonObject, success, failure);
-        q.add(req);*/
+        req.setRetryPolicy(new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        q.add(req);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //Toast.makeText(DisplayImage.this,response,Toast.LENGTH_LONG).show();
-                        Log.i("PHOTO SUCCESS", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //Toast.makeText(DisplayImage.this,error.toString(),Toast.LENGTH_LONG).show();
-                        Log.i("PHOTO FAILURE", error.toString());
-                    }
-                }){
-            @Override
-            protected Map<String,String> getParams(){
-                Date currentTime = Calendar.getInstance().getTime();
-                try {
-                    location = locationManager.getLastKnownLocation("gps");
-                } catch (SecurityException e){}
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("IMU_x",String.valueOf(Camera.x1));
-                params.put("IMU_y", String.valueOf(Camera.y1));
-                params.put("IMU_z", String.valueOf(Camera.z1));
-                params.put("dateTime", currentTime.toString());
-                params.put("humidity", "-200");
-                params.put("barometricPressure", "-200");
-                params.put("longitude", String.valueOf(location.getLongitude()));
-                params.put("latitude", String.valueOf(location.getLatitude()));
-                params.put("temperature", "-200");
-                params.put("windSpeed", "-200");
-                params.put("photo", "");
-                params.put("id", "0");
-                return params;
-            }
 
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
 
     }
 
     private JSONObject makeJsonObject() {
-
-        /*File f = null;
-
-        try {
-            //create a file to write bitmap data
-            f = new File(this.getFilesDir(), "image.png");
-            f.createNewFile();
-
-            Bitmap bitmap = rotatedImage;
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(CompressFormat.PNG, 0, bos);
-            byte[] bitmapData = bos.toByteArray();
-
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(bitmapData);
-            fos.flush();
-            fos.close();
-            Log.i("FILE CREATION", "SUCCESS");
-        } catch(IOException e){
-            Log.i("FILE CREATION ERROR", e.getMessage());
-        }*/
 
 
         JSONObject o = new JSONObject();
@@ -253,9 +198,9 @@ public class DisplayImage extends Activity implements SensorEventListener {
             try {
                 location = locationManager.getLastKnownLocation("gps");
             } catch (SecurityException e){}
-            o.put("IMU_x", Camera.x1);
-            o.put("IMU_y", Camera.y1);
-            o.put("IMU_z", Camera.z1);
+            o.put("IMU_x", "-200");
+            o.put("IMU_y", "-200");
+            o.put("IMU_z", "-200");
             o.put("dateTime", currentTime);
             o.put("humidity", "-200");
             o.put("barometricPressure", "-200");
@@ -268,9 +213,9 @@ public class DisplayImage extends Activity implements SensorEventListener {
             }
             o.put("temperature", "-200");
             o.put("windSpeed", "-200");
-            o.put("photo", Camera.TheFileToSend);
+            o.put("photo", encodedImage);//encodedImage
+            Log.i("ENCODED IMAGE", encodedImage);
             o.put("id", 0);
-            Log.i("JSON", o.toString());
 
         } catch (JSONException e) {
             Log.i("json", "json fail");
@@ -278,12 +223,4 @@ public class DisplayImage extends Activity implements SensorEventListener {
         return o;
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }

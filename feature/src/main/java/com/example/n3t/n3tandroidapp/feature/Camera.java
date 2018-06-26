@@ -50,7 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Camera extends AppCompatActivity implements SensorEventListener {
+public class Camera extends AppCompatActivity  {
     private static final String TAG = "AndroidCameraApi";
     private Button takePictureButton;
     private TextureView textureView;
@@ -76,16 +76,6 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
     public static Image imageTempStore;
     public static byte[] bytesTempStore;
 
-    private Sensor sensor;
-    private SensorManager sm;
-    private double x = 0;
-    public static double x1 = 0;
-    private double y = 0;
-    public static double y1 = 0;
-    private double z = 0;
-    public static double z1 = 0;
-
-    public static File TheFileToSend;
 
 
     @Override
@@ -104,9 +94,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
             }
         });
 
-        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sm.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+
     }
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -253,11 +241,6 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
                 public void onConfigureFailed(CameraCaptureSession session) {
                 }
             }, mBackgroundHandler);
-            try {
-                TheFileToSend = file;
-            }catch (NullPointerException e){
-                Log.i("NULL POINTER","YOU KNOW WHERE");
-            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -364,20 +347,6 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
         return imageTempStore;
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        x = event.values[0];
-        x1 = x;
-        y = event.values[1];
-        y1 = y;
-        z = event.values[2];
-        z1 = z;
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }
 
 
