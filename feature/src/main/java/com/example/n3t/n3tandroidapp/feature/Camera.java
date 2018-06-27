@@ -51,6 +51,7 @@ import java.util.List;
 
 
 public class Camera extends AppCompatActivity  {
+    private Button back;
     private static final String TAG = "AndroidCameraApi";
     private Button takePictureButton;
     private TextureView textureView;
@@ -80,6 +81,7 @@ public class Camera extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         textureView = (TextureView) findViewById(R.id.texture);
@@ -91,6 +93,14 @@ public class Camera extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 takePicture();
+            }
+        });
+
+        back = (Button)findViewById(R.id.back_button);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Camera.this, MainActivity.class));
             }
         });
 

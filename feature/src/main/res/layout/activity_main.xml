@@ -47,6 +47,18 @@
             android:textColor="#FFFFFF"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="203dp" />
+
+        <Button
+            android:id="@+id/exit_button"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="150dp"
+            android:background="@android:color/holo_red_dark"
+            android:padding="10dp"
+            android:text="EXIT"
+            android:textColor="#FFFFFF"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="300dp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

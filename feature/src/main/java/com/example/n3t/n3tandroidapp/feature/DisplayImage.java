@@ -107,10 +107,10 @@ public class DisplayImage extends Activity  {
             rotatedImage = Bitmap.createBitmap(bitmapImage ,0 ,0 ,bitmapImage.getWidth() ,bitmapImage.getHeight() ,matrix ,true);
             ((ImageView)findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
         }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
         rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
         byte[] imageBytes = baos.toByteArray();
-        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
 
         location = locationManager.getLastKnownLocation("gps");
         Date time = Calendar.getInstance().getTime();
@@ -119,7 +119,7 @@ public class DisplayImage extends Activity  {
             ((TextView) findViewById(R.id.coordinates)).setText("Location: (" + Math.round(location.getLatitude() * 100) / 100 + ", " + Math.round(location.getLongitude() * 100) / 100 + "), Date: " + time);
         }
 
-        sendUpdates(makeJsonObject());
+        //sendUpdates(makeJsonObject());
 
         mWaitHandler.postDelayed(new Runnable() {
 
