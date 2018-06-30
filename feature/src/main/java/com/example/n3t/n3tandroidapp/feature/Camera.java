@@ -100,6 +100,7 @@ public class Camera extends AppCompatActivity  {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.exit(0);
                 startActivity(new Intent(Camera.this, MainActivity.class));
             }
         });
@@ -207,6 +208,7 @@ public class Camera extends AppCompatActivity  {
                         bytesTempStore = bytes;
                         save(bytes);
                         startActivity(new Intent(Camera.this, DisplayImage.class));
+                        finish();
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {

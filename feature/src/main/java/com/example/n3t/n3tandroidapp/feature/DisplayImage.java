@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,12 +47,13 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 
 public class DisplayImage extends Activity  {
 
-    private String urlString = "https://n3t-portal.herokuapp.com/postDataLocation";
+    private String urlString = "https://n3t-api.herokuapp.com/postDataLocationPhotoStringJSON";
     private Handler mWaitHandler = new Handler();
 
     private LocationManager locationManager;
@@ -107,10 +109,10 @@ public class DisplayImage extends Activity  {
             rotatedImage = Bitmap.createBitmap(bitmapImage ,0 ,0 ,bitmapImage.getWidth() ,bitmapImage.getHeight() ,matrix ,true);
             ((ImageView)findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
         }
-        /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
         byte[] imageBytes = baos.toByteArray();
-        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
+        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
         location = locationManager.getLastKnownLocation("gps");
         Date time = Calendar.getInstance().getTime();
@@ -119,7 +121,7 @@ public class DisplayImage extends Activity  {
             ((TextView) findViewById(R.id.coordinates)).setText("Location: (" + Math.round(location.getLatitude() * 100) / 100 + ", " + Math.round(location.getLongitude() * 100) / 100 + "), Date: " + time);
         }
 
-        //sendUpdates(makeJsonObject());
+        sendUpdates(makeJsonObject());
 
         mWaitHandler.postDelayed(new Runnable() {
 
@@ -185,6 +187,54 @@ public class DisplayImage extends Activity  {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         q.add(req);
 
+        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        Log.i("VOLLEY SUCCESS","YAY");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.i("VOLLEY FAILURE", "ERROR");
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String,String> params = new Hashtable<>();
+
+                Date currentTime = Calendar.getInstance().getTime();
+                try {
+                    location = locationManager.getLastKnownLocation("gps");
+                } catch (SecurityException e){}
+
+                //Adding parameters
+                params.put("IMU_x", "-200");
+                params.put("IMU_y", "-200");
+                params.put("IMU_z", "-200");
+                params.put("dateTime", currentTime.toString());
+                params.put("humidity", "-200");
+                params.put("barometricPressure", "-200");
+                params.put("longitude", "-200");
+                params.put("latitude", "-200");
+                params.put("temperature", "-200");
+                params.put("windSpeed", "-200");
+                params.put("photo", "-200");
+                params.put("id", "0");
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);*/
+
 
 
     }
@@ -213,7 +263,7 @@ public class DisplayImage extends Activity  {
             }
             o.put("temperature", "-200");
             o.put("windSpeed", "-200");
-            o.put("photo", encodedImage);//encodedImage
+            o.put("photo", "data:image/png;base64,"+encodedImage);
             Log.i("ENCODED IMAGE", encodedImage);
             o.put("id", 0);
 
