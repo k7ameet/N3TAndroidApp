@@ -1,6 +1,7 @@
 package com.example.n3t.n3tandroidapp.feature;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -71,57 +72,69 @@ public class DisplayImage extends Activity  {
 
 
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {}
+        try {
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) { }
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
 
-            @Override
-            public void onProviderEnabled(String provider) { }
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
 
-            @Override
-            public void onProviderDisabled(String provider) {
-                ((TextView)findViewById(R.id.coordinates)).setText("Turn GPS on for location");
+                @Override
+                public void onProviderDisabled(String provider) {
+                    ((TextView) findViewById(R.id.coordinates)).setText("Turn GPS on for location");
+                }
+            };
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
+                }, 1);
+                return;
             }
-        };
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
-            }, 1);
-            return;
-        }
-        locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
+            locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
-        if(image == null){
-            ((TextView)findViewById(R.id.coordinates)).setText("Error retrieving image");
-        }
-        else{
+            if (image == null) {
+                ((TextView) findViewById(R.id.coordinates)).setText("Error retrieving image");
+            } else {
 
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            byte[] bytes = Camera.bytesTempStore;
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-            rotatedImage = Bitmap.createBitmap(bitmapImage ,0 ,0 ,bitmapImage.getWidth() ,bitmapImage.getHeight() ,matrix ,true);
-            ((ImageView)findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
-        byte[] imageBytes = baos.toByteArray();
-        encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                byte[] bytes = Camera.bytesTempStore;
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
+                ((ImageView) findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
+            byte[] imageBytes = baos.toByteArray();
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-        location = locationManager.getLastKnownLocation("gps");
-        Date time = Calendar.getInstance().getTime();
-        // NULL POINTER EXCEPTION
-        if(location != null) {
-            ((TextView) findViewById(R.id.coordinates)).setText("Location: (" + Math.round(location.getLatitude() * 100) / 100 + ", " + Math.round(location.getLongitude() * 100) / 100 + "), Date: " + time);
-        }
+            location = locationManager.getLastKnownLocation("gps");
+            Date time = Calendar.getInstance().getTime();
+            // NULL POINTER EXCEPTION
+            if (location != null) {
+                ((TextView) findViewById(R.id.coordinates)).setText("Location: (" + Math.round(location.getLatitude() * 100) / 100 + ", " + Math.round(location.getLongitude() * 100) / 100 + "), Date: " + time);
+            }
 
-        sendUpdates(makeJsonObject());
+            sendUpdates(makeJsonObject());
+        }catch(OutOfMemoryError oom){
+            Context context = getApplicationContext();
+            CharSequence text = "Error: this photo was not sent to server";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            startActivity(new Intent(DisplayImage.this, Camera.class));
+            finish();
+        }
 
         mWaitHandler.postDelayed(new Runnable() {
 

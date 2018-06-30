@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent serviceIntent = new Intent(this, AccelerometerService.class);
         startService(serviceIntent);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
 
         PermissionManager permissionManager = PermissionManager.getInstance(this);
         permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), new PermissionManager.PermissionRequestListener() {
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, Camera.class));
+                finish();
             }
         });
 
@@ -110,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, Camera.class));
+                finish();
             }
         });
 
@@ -117,12 +124,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, Camera.class));
+                finish();
             }
         });
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.exit(0);
                 finish();
             }
         });
