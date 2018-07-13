@@ -1,50 +1,28 @@
 package com.example.n3t.n3tandroidapp.feature;
 
-
-import android.Manifest;
-import android.app.Activity;
 import android.app.Service;
-import android.app.VoiceInteractor;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.widget.TextView;
 import java.util.Calendar;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.intentfilter.androidpermissions.PermissionManager;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Collections.singleton;
 
 
 public class AccelerometerService extends Service implements SensorEventListener{
@@ -123,6 +101,8 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public void onDestroy() {
         Log.i("onDestroy", "Service destroyed");
+        locationManager.removeUpdates(locationListener);
+        sm.unregisterListener(this);
     }
 
 

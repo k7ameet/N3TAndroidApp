@@ -5,18 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
-import android.os.Environment;
 import android.os.Handler;
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,30 +20,18 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
 
 public class DisplayImage extends Activity  {
 
@@ -68,7 +49,6 @@ public class DisplayImage extends Activity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
-        Image image = Camera.imageTempStore;
 
 
 
@@ -100,7 +80,7 @@ public class DisplayImage extends Activity  {
             }
             locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
-            if (image == null) {
+            if (Camera.imageTempStore == null) {
                 ((TextView) findViewById(R.id.coordinates)).setText("Error retrieving image");
             } else {
 
@@ -133,6 +113,7 @@ public class DisplayImage extends Activity  {
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
             startActivity(new Intent(DisplayImage.this, Camera.class));
+            Log.i("ERROR OUT OF MEMORY", oom.getMessage());
             finish();
         }
 
@@ -162,8 +143,14 @@ public class DisplayImage extends Activity  {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        locationManager.removeUpdates(locationListener);
+        mWaitHandler.removeCallbacksAndMessages(null);
+    }
 
-        //Remove all the callbacks otherwise navigation will execute even after activity is killed or closed.
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
         mWaitHandler.removeCallbacksAndMessages(null);
     }
 
@@ -200,53 +187,6 @@ public class DisplayImage extends Activity  {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         q.add(req);
 
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, urlString,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        Log.i("VOLLEY SUCCESS","YAY");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.i("VOLLEY FAILURE", "ERROR");
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String,String> params = new Hashtable<>();
-
-                Date currentTime = Calendar.getInstance().getTime();
-                try {
-                    location = locationManager.getLastKnownLocation("gps");
-                } catch (SecurityException e){}
-
-                //Adding parameters
-                params.put("IMU_x", "-200");
-                params.put("IMU_y", "-200");
-                params.put("IMU_z", "-200");
-                params.put("dateTime", currentTime.toString());
-                params.put("humidity", "-200");
-                params.put("barometricPressure", "-200");
-                params.put("longitude", "-200");
-                params.put("latitude", "-200");
-                params.put("temperature", "-200");
-                params.put("windSpeed", "-200");
-                params.put("photo", "-200");
-                params.put("id", "0");
-
-                //returning parameters
-                return params;
-            }
-        };
-
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        //Adding request to the queue
-        requestQueue.add(stringRequest);*/
 
 
 

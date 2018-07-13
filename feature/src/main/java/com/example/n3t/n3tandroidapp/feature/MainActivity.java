@@ -2,8 +2,6 @@ package com.example.n3t.n3tandroidapp.feature;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -131,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent myService = new Intent(MainActivity.this, AccelerometerService.class);
+                stopService(myService);
                 System.exit(0);
                 finish();
             }
