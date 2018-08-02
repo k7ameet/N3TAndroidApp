@@ -14,7 +14,7 @@ import static java.util.Collections.singleton;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button car, truck, rmc, exit;
+    Button car, rmc, exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         car = (Button)findViewById(R.id.car_button);
-        truck = (Button)findViewById(R.id.truck_button);
         rmc = (Button)findViewById(R.id.rmc_button);
         exit = (Button)findViewById(R.id.exit_button);
 
@@ -110,13 +109,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        truck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Camera.class));
-                finish();
-            }
-        });
 
         rmc.setOnClickListener(new View.OnClickListener() {
             @Override
