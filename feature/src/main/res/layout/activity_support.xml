@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Support">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="40dp"
+            android:textColor="#008080"
+            tools:text="For support, contact us at:\n\nsupport@N3T.kiwi\n\nand check out our FAQs at:\n\nwww.N3T.kiwi" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

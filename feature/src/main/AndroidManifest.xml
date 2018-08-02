@@ -15,7 +15,9 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application>
-        <activity android:name=".MainActivity" android:label="N3T: Select Mode">
+        <activity
+            android:name=".MainActivity"
+            android:label="N3T: Select Mode">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -33,7 +35,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Camera" android:label="N3T: Take Photo">
+        <activity
+            android:name=".Camera"
+            android:label="N3T: Take Photo">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,7 +50,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayImage" android:label="N3T: Photo Taken">
+        <activity
+            android:name=".DisplayImage"
+            android:label="N3T: Photo Taken">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,8 +68,61 @@
 
         <service
             android:name=".AccelerometerService"
-            android:stopWithTask="true"
-            android:exported="false"></service>
+            android:exported="false"
+            android:stopWithTask="true" />
+
+        <activity android:name=".Settings">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".About">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Support">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Credit">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
