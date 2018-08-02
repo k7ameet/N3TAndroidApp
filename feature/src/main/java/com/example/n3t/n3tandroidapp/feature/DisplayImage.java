@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
@@ -33,7 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DisplayImage extends Activity  {
+public class DisplayImage extends AppCompatActivity {
 
     private String urlString = "https://n3t-api.herokuapp.com/postDataLocationPhotoStringJSON";
     private Handler mWaitHandler = new Handler();

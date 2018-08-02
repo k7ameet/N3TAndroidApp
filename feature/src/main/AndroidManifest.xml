@@ -15,7 +15,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:label="N3T: Select Mode">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -33,7 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Camera">
+        <activity android:name=".Camera" android:label="N3T: Take Photo">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,7 +46,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".DisplayImage">
+        <activity android:name=".DisplayImage" android:label="N3T: Photo Taken">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
