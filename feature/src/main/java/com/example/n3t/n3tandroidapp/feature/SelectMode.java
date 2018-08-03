@@ -16,9 +16,9 @@ public class SelectMode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_mode);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.mipmap.ic_launcher);
+        actionBar.setIcon(R.mipmap.ic_launcher);*/
 
 
         car = (Button)findViewById(R.id.car_button);
@@ -28,7 +28,6 @@ public class SelectMode extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SelectMode.this, Camera.class));
-                finish();
             }
         });
 
@@ -37,12 +36,8 @@ public class SelectMode extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SelectMode.this, Camera.class));
-                finish();
             }
         });
-
-
-
     }
 
 }

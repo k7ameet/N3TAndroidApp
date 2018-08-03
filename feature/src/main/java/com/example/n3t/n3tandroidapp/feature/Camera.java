@@ -46,7 +46,6 @@ import java.util.List;
 
 
 public class Camera extends AppCompatActivity  {
-    private Button back;
     private static final String TAG = "AndroidCameraApi";
     private ImageButton takePictureButton;
     private TextureView textureView;
@@ -88,18 +87,10 @@ public class Camera extends AppCompatActivity  {
             }
         });
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.mipmap.ic_launcher);
+        actionBar.setIcon(R.mipmap.ic_launcher);*/
 
-        back = (Button)findViewById(R.id.back_button);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                startActivity(new Intent(Camera.this, MainActivity.class));
-            }
-        });
 
 
     }

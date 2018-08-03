@@ -16,9 +16,9 @@ public class Options extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.mipmap.ic_launcher);
+        actionBar.setIcon(R.mipmap.ic_launcher);*/
 
         settings = (Button)findViewById(R.id.settings_btn);
         about = (Button)findViewById(R.id.about_btn);
@@ -29,7 +29,6 @@ public class Options extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Options.this, About.class));
-                finish();
             }
         });
 
@@ -37,7 +36,6 @@ public class Options extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Options.this, Credits.class));
-                finish();
             }
         });
 
@@ -45,7 +43,6 @@ public class Options extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Options.this, Support.class));
-                finish();
             }
         });
 
@@ -53,7 +50,6 @@ public class Options extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Options.this, Settings.class));
-                finish();
             }
         });
 
