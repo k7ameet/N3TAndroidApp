@@ -1,16 +1,11 @@
 package com.example.n3t.n3tandroidapp.feature;
 
-import android.Manifest;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
-import com.intentfilter.androidpermissions.PermissionManager;
-
-import static java.util.Collections.singleton;
 
 public class SelectMode extends AppCompatActivity {
 
@@ -49,4 +44,5 @@ public class SelectMode extends AppCompatActivity {
 
 
     }
+
 }
