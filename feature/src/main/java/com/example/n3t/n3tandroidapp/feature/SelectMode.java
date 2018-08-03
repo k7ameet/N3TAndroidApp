@@ -21,10 +21,9 @@ public class SelectMode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_mode);
 
-        Intent serviceIntent = new Intent(this, AccelerometerService.class);
-        startService(serviceIntent);
-
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
 
 
         car = (Button)findViewById(R.id.car_button);

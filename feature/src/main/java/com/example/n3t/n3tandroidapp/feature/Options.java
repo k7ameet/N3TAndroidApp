@@ -1,6 +1,7 @@
 package com.example.n3t.n3tandroidapp.feature;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,10 @@ public class Options extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
 
         settings = (Button)findViewById(R.id.settings_btn);
         about = (Button)findViewById(R.id.about_btn);

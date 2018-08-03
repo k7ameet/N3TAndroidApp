@@ -14,6 +14,7 @@
 
 
         <TextView
+            android:id="@+id/about_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="25dp"
@@ -21,7 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="40dp"
             android:textColor="#008080"
-            tools:text="This app is designed to make your rural road travels safer. You are using this app entirely on your own account.\n\nSafe travels from the N3T crew :)" />
+            android:text="This app is designed to make your rural road travels safer. You are using this app entirely on your own account.\n\nSafe travels from the N3T crew :)" />
 
     </LinearLayout>
 

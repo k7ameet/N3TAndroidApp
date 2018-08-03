@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent serviceIntent = new Intent(this, AccelerometerService.class);
+        startService(serviceIntent);
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.mipmap.ic_launcher);

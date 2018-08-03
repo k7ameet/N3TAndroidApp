@@ -14,6 +14,7 @@
 
 
         <TextView
+            android:id="@+id/credits_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="25dp"
@@ -21,7 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="40dp"
             android:textColor="#008080"
-            tools:text="Thank you for helping us to improve this appand thereby make rural roads safer.\n\nThis app wouldn't be around if not for..." />
+            android:text="Thank you for helping us to improve this appand thereby make rural roads safer.\n\nThis app wouldn't be around if not for..." />
 
     </LinearLayout>
 
