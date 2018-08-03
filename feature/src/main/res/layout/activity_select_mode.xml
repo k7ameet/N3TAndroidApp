@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-
+    tools:context=".SelectMode">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="start">
 
         <Button
-            android:id="@+id/start_taking_photos_btn"
+            android:id="@+id/car_button"
             android:layout_width="234dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -23,7 +21,7 @@
             android:layout_marginTop="50dp"
             android:background="#ffffff"
             android:padding="10dp"
-            android:text="Start taking photos"
+            android:text="Car/Truck"
             android:gravity="start|center_vertical"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="#008080"
@@ -31,36 +29,21 @@
             tools:layout_editor_absoluteY="73dp" />
 
         <Button
-            android:id="@+id/options_btn"
-            android:layout_width="165dp"
+            android:id="@+id/rmc_button"
+            android:layout_width="341dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:background="#ffffff"
-            android:padding="10dp"
-            android:text="Options"
             android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Road Maintenance Contractor"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="#008080"
             tools:layout_editor_absoluteX="52dp"
             tools:layout_editor_absoluteY="73dp" />
 
-        <Button
-            android:id="@+id/exit_btn"
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="100dp"
-            android:background="#ffffff"
-            android:padding="10dp"
-            android:text="Exit"
-            android:gravity="start|center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FF0000"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="73dp" />
 
     </LinearLayout>
 

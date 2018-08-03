@@ -2,6 +2,7 @@ package com.example.n3t.n3tandroidapp.feature;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Path;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,15 +15,14 @@ import static java.util.Collections.singleton;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button car, rmc, exit;
+
+
+    Button exit, start, options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent serviceIntent = new Intent(this, AccelerometerService.class);
-        startService(serviceIntent);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
@@ -96,38 +96,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        car = (Button)findViewById(R.id.car_button);
-        rmc = (Button)findViewById(R.id.rmc_button);
-        exit = (Button)findViewById(R.id.exit_button);
-
-        car.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Camera.class));
-                finish();
-            }
-        });
-
-
-        rmc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, Camera.class));
-                finish();
-            }
-        });
+        exit = (Button)findViewById(R.id.exit_btn);
+        start = (Button)findViewById(R.id.start_taking_photos_btn);
+        options = (Button)findViewById(R.id.options_btn);
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myService = new Intent(MainActivity.this, AccelerometerService.class);
-                stopService(myService);
-                System.exit(0);
+                startActivity(new Intent(MainActivity.this, SelectMode.class));
                 finish();
             }
         });
 
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SelectMode.class));
+                finish();
+            }
+        });
 
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, Options.class));
+                finish();
+            }
+        });
     }
 }

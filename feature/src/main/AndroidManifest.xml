@@ -17,7 +17,7 @@
     <application>
         <activity
             android:name=".MainActivity"
-            android:label="N3T: Select Mode">
+            android:label="N3T: Home Screen">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -71,7 +71,9 @@
             android:exported="false"
             android:stopWithTask="true" />
 
-        <activity android:name=".Settings">
+        <activity
+            android:name=".Options"
+            android:label="N3T: Options">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -84,7 +86,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".About">
+        <activity
+            android:name=".About"
+            android:label="N3T: About">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -97,7 +101,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".Support">
+        <activity
+            android:name=".Support"
+            android:label="N3T: Support">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -110,7 +116,38 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".Credit">
+        <activity
+            android:name=".Credits"
+            android:label="N3T: Credits">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SelectMode"
+            android:label="N3T: Select Mode">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Settings"
+            android:label="N3T: Settings">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
