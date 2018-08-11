@@ -43,6 +43,8 @@ public class DisplayImage extends AppCompatActivity {
     private LocationListener locationListener;
     private Location location;
 
+    private String API_KEY = "AIzaSyDS_9uk8TEjpSabnto6SqCNt9zKkXlPGTo";
+
     private Bitmap rotatedImage;
     private String encodedImage = "";
 
