@@ -26,11 +26,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,6 +44,7 @@ public class DisplayImage extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Location location;
+    private Date currentDT;
 
     private String API_KEY = "AIzaSyDS_9uk8TEjpSabnto6SqCNt9zKkXlPGTo";
 
@@ -57,6 +60,9 @@ public class DisplayImage extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.mipmap.ic_launcher);*/
 
+        currentDT = new Date();
+        final String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDT);
+        final String time = new SimpleDateFormat("mm:ss").format(currentDT);
 
 
         try {
@@ -76,7 +82,7 @@ public class DisplayImage extends AppCompatActivity {
 
                 @Override
                 public void onProviderDisabled(String provider) {
-                    ((TextView) findViewById(R.id.coordinates)).setText("Turn GPS on for location");
+                    ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\nTurn GPS on for location");
                 }
             };
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -88,7 +94,7 @@ public class DisplayImage extends AppCompatActivity {
             locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
             if (Camera.imageTempStore == null) {
-                ((TextView) findViewById(R.id.coordinates)).setText("Error retrieving image");
+                ((TextView) findViewById(R.id.display_text)).setText("Error retrieving image");
             } else {
 
                 Matrix matrix = new Matrix();
@@ -98,7 +104,7 @@ public class DisplayImage extends AppCompatActivity {
                 options.inSampleSize = 2;
                 Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
                 rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
-                ((ImageView) findViewById(R.id.current_image)).setImageBitmap(rotatedImage);
+                ((ImageView) findViewById(R.id.image_image)).setImageBitmap(rotatedImage);
             }
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
@@ -106,12 +112,11 @@ public class DisplayImage extends AppCompatActivity {
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
             location = locationManager.getLastKnownLocation("gps");
-            Date time = Calendar.getInstance().getTime();
             // NULL POINTER EXCEPTION
             if (location != null) {
-                ((TextView) findViewById(R.id.coordinates)).setText("Location: (" + Math.round(location.getLatitude() * 100) / 100 + ", " + Math.round(location.getLongitude() * 100) / 100 + "), Date: " + time);
+                ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\nLat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100);
             }
-
+            getCurrentMap();
             sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();
@@ -193,10 +198,6 @@ public class DisplayImage extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         q.add(req);
-
-
-
-
     }
 
     private JSONObject makeJsonObject() {
@@ -231,6 +232,30 @@ public class DisplayImage extends AppCompatActivity {
             Log.i("json", "json fail");
         }
         return o;
+    }
+
+    private void getCurrentMap() {
+        try {
+            location = locationManager.getLastKnownLocation("gps");
+        } catch (SecurityException e){}
+        String url = "http://maps.google.com/maps/api/staticmap?center=" +location.getLatitude()+ "," +location.getLongitude()+ "&zoom=15&maptype=roadmap&size=200x200&sensor=false&markers=size:mid%7Ccolor:green%7C"+location.getLatitude()+ "," +location.getLongitude()+"&key="+API_KEY;
+        RequestQueue q = Volley.newRequestQueue(this);
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        Log.i("MAP SUCCESS", "LETS GO!!");
+                        ((ImageView) findViewById(R.id.map_image)).setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("MAP ERROR", "fuck");
+                        //mImageView.setImageResource(R.drawable.image_load_error);
+                    }
+                });
+// Access the RequestQueue through your singleton class.
+        q.add(request);
     }
 
 }
