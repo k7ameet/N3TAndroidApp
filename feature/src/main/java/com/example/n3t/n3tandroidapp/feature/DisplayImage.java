@@ -62,7 +62,7 @@ public class DisplayImage extends AppCompatActivity {
 
         currentDT = new Date();
         final String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDT);
-        final String time = new SimpleDateFormat("mm:ss").format(currentDT);
+        final String time = new SimpleDateFormat("hh:mm").format(currentDT);
 
 
         try {

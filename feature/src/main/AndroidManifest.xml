@@ -181,6 +181,21 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity android:name=".CameraLayout"
+            android:label="N3T: Take Photo"
+            android:parentActivityName=".SelectMode">
+            <intent-filter android:order="1">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="n3t.example.com"
+                    android:pathPattern="/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
