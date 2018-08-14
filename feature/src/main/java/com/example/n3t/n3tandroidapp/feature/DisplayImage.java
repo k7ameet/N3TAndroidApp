@@ -51,10 +51,17 @@ public class DisplayImage extends AppCompatActivity {
     private Bitmap rotatedImage;
     private String encodedImage = "";
 
+    private byte[] byteArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
+
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            byteArray = b.getByteArray("byteArray");
+        }
 
         /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
@@ -93,19 +100,19 @@ public class DisplayImage extends AppCompatActivity {
             }
             locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
-            if (Camera.imageTempStore == null) {
+            /*if (Camera.imageTempStore == null) {
                 ((TextView) findViewById(R.id.display_text)).setText("Error retrieving image");
-            } else {
+            } else {*/
 
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
-                byte[] bytes = Camera.bytesTempStore;
+                byte[] bytes = byteArray;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
                 Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
                 rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 ((ImageView) findViewById(R.id.image_image)).setImageBitmap(rotatedImage);
-            }
+            //}
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
             byte[] imageBytes = baos.toByteArray();
@@ -139,7 +146,7 @@ public class DisplayImage extends AppCompatActivity {
                 try {
 
                     //Go to next page i.e, start the next activity.
-                    Intent intent = new Intent(getApplicationContext(), Camera.class);
+                    Intent intent = new Intent(getApplicationContext(), CameraLayout.class);
                     startActivity(intent);
 
                     //Let's Finish Splash Activity since we don't want to show this when user press back button.
