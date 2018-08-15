@@ -51,17 +51,10 @@ public class DisplayImage extends AppCompatActivity {
     private Bitmap rotatedImage;
     private String encodedImage = "";
 
-    private byte[] byteArray;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
-
-        Bundle b = getIntent().getExtras();
-        if (b != null) {
-            byteArray = b.getByteArray("byteArray");
-        }
 
         /*ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
@@ -106,7 +99,7 @@ public class DisplayImage extends AppCompatActivity {
 
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
-                byte[] bytes = byteArray;
+                byte[] bytes = CameraLayout.layout;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
                 Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
@@ -242,10 +235,15 @@ public class DisplayImage extends AppCompatActivity {
     }
 
     private void getCurrentMap() {
+        String url = "";
         try {
             location = locationManager.getLastKnownLocation("gps");
         } catch (SecurityException e){}
-        String url = "http://maps.google.com/maps/api/staticmap?center=" +location.getLatitude()+ "," +location.getLongitude()+ "&zoom=15&maptype=roadmap&size=200x200&sensor=false&markers=size:mid%7Ccolor:green%7C"+location.getLatitude()+ "," +location.getLongitude()+"&key="+API_KEY;
+        try {
+            url = "http://maps.google.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=15&maptype=roadmap&size=200x200&sensor=false&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
+        } catch (NullPointerException e) {
+            return;
+        }
         RequestQueue q = Volley.newRequestQueue(this);
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {

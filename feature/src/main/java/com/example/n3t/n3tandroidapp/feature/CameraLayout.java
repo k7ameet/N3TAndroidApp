@@ -1,12 +1,18 @@
 package com.example.n3t.n3tandroidapp.feature;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.hardware.Camera;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class CameraLayout extends AppCompatActivity {
 
@@ -14,12 +20,15 @@ public class CameraLayout extends AppCompatActivity {
     FrameLayout fl;
     CameraClass cameraPreview;
     ImageButton click;
+    static byte[] layout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_layout);
         fl = (FrameLayout)findViewById(R.id.camera_frame);
+
 
         camera = Camera.open();
 
@@ -38,11 +47,8 @@ public class CameraLayout extends AppCompatActivity {
     Camera.PictureCallback pic = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            Intent intent = new Intent(CameraLayout.this, DisplayImage.class);
-            Bundle b = new Bundle();
-            b.putByteArray("byteArray", data);
-            intent.putExtras(b);
-            startActivity(intent);
+            layout = data;
+            startActivity(new Intent(CameraLayout.this, DisplayImage.class));
             finish();
         }
     };

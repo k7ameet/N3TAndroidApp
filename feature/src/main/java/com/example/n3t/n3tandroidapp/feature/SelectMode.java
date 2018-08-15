@@ -27,7 +27,7 @@ public class SelectMode extends AppCompatActivity {
         car.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SelectMode.this, Camera.class));
+                startActivity(new Intent(SelectMode.this, CameraLayout.class));
             }
         });
 
