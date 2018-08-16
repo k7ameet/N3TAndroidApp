@@ -20,9 +20,9 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="40dp"
+            android:textSize="30dp"
             android:textColor="#008080"
-            android:text="Thank you for helping us to improve this appand thereby make rural roads safer.\n\nThis app wouldn't be around if not for..." />
+            android:text="Thank you for helping us to improve this app and thereby make rural roads safer.\n\nThis app wouldn't be around if not for..." />
 
     </LinearLayout>
 

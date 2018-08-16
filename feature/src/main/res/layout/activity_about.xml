@@ -20,7 +20,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="40dp"
+            android:textSize="30dp"
             android:textColor="#008080"
             android:text="This app is designed to make your rural road travels safer. You are using this app entirely on your own account.\n\nSafe travels from the N3T crew :)" />
 
