@@ -21,6 +21,7 @@ public class CameraLayout extends AppCompatActivity {
     CameraClass cameraPreview;
     ImageButton click;
     static byte[] layout;
+    boolean cameraAvailable = false;
 
 
     @Override
@@ -34,6 +35,8 @@ public class CameraLayout extends AppCompatActivity {
 
         cameraPreview = new CameraClass(this, camera);
         fl.addView(cameraPreview);
+
+        cameraAvailable = true;
 
         click = (ImageButton)findViewById(R.id.camera_click);
         click.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +57,9 @@ public class CameraLayout extends AppCompatActivity {
     };
 
     public void clickButton(View v) {
-        if(camera != null) {
+        if(camera != null && cameraAvailable) {
             camera.takePicture(null, null, pic);
+            cameraAvailable = false;
         }
 
     }
