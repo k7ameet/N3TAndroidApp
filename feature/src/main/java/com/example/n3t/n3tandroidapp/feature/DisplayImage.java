@@ -46,7 +46,13 @@ public class DisplayImage extends AppCompatActivity {
     private Location location;
     private Date currentDT;
 
-    private String API_KEY = "AIzaSyDS_9uk8TEjpSabnto6SqCNt9zKkXlPGTo";
+    private String API_KEY = "AIzaSyDFWj6I9Ip1POrxoaflAC7p_jVxLZtsf0U";
+
+    /*
+    The account details are:
+    email: northlandinnovationn3t@gmail.com
+    password: n3tandroidapp!
+    */
 
     private Bitmap rotatedImage;
     private String encodedImage = "";
@@ -114,9 +120,12 @@ public class DisplayImage extends AppCompatActivity {
             location = locationManager.getLastKnownLocation("gps");
             // NULL POINTER EXCEPTION
             if (location != null) {
-                ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\nLat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100);
+                double loc = location.getLatitude();
+                double lat = location.getLongitude();
+                String degrees = convertCoordinatesToDegrees(loc, lat);
+                ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\n"+degrees); //Lat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100
             }
-            getCurrentMap();
+            getCurrentMap(location);
             sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();
@@ -225,7 +234,7 @@ public class DisplayImage extends AppCompatActivity {
             o.put("temperature", "-200");
             o.put("windSpeed", "-200");
             o.put("photo", "data:image/png;base64,"+encodedImage);
-            Log.i("ENCODED IMAGE", encodedImage);
+            //Log.i("ENCODED IMAGE", encodedImage);
             o.put("id", 0);
 
         } catch (JSONException e) {
@@ -234,14 +243,12 @@ public class DisplayImage extends AppCompatActivity {
         return o;
     }
 
-    private void getCurrentMap() {
+    private void getCurrentMap(Location location) {
         String url = "";
         try {
-            location = locationManager.getLastKnownLocation("gps");
-        } catch (SecurityException e){}
-        try {
             url = "http://maps.google.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=15&maptype=roadmap&size=200x200&sensor=false&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
+            Log.i("URL ERROR", e.toString());
             return;
         }
         RequestQueue q = Volley.newRequestQueue(this);
@@ -255,12 +262,50 @@ public class DisplayImage extends AppCompatActivity {
                 }, 0, 0, null,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("MAP ERROR", "fuck");
+                        Log.i("MAP ERROR", error.toString());
                         //mImageView.setImageResource(R.drawable.image_load_error);
                     }
                 });
 // Access the RequestQueue through your singleton class.
         q.add(request);
+    }
+
+    private String convertCoordinatesToDegrees (double latitude, double longitude) {
+        StringBuilder builder = new StringBuilder();
+
+        if (latitude < 0) {
+            builder.append("Lat: S ");
+        } else {
+            builder.append("Lat: N ");
+        }
+
+        String latitudeDegrees = Location.convert(Math.abs(latitude), Location.FORMAT_SECONDS);
+        String[] latitudeSplit = latitudeDegrees.split(":");
+        builder.append(latitudeSplit[0]);
+        builder.append("°");
+        builder.append(latitudeSplit[1]);
+        builder.append("'");
+        builder.append(latitudeSplit[2]);
+        builder.append("\"");
+
+        builder.append("\n");
+
+        if (longitude < 0) {
+            builder.append("Lon: W ");
+        } else {
+            builder.append("Lon: E ");
+        }
+
+        String longitudeDegrees = Location.convert(Math.abs(longitude), Location.FORMAT_SECONDS);
+        String[] longitudeSplit = longitudeDegrees.split(":");
+        builder.append(longitudeSplit[0]);
+        builder.append("°");
+        builder.append(longitudeSplit[1]);
+        builder.append("'");
+        builder.append(longitudeSplit[2]);
+        builder.append("\"");
+
+        return builder.toString();
     }
 
 }
