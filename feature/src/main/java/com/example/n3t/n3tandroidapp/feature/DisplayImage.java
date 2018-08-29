@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -38,6 +37,7 @@ import java.util.Date;
 
 public class DisplayImage extends AppCompatActivity {
 
+    //Server post URL, change when the server is changed
     private String urlString = "https://n3t-api.herokuapp.com/postDataLocationPhotoStringJSON";
     private Handler mWaitHandler = new Handler();
 
@@ -46,6 +46,7 @@ public class DisplayImage extends AppCompatActivity {
     private Location location;
     private Date currentDT;
 
+    //Google API key needed for any Google API service used, in this case for the static maps
     private String API_KEY = "AIzaSyDFWj6I9Ip1POrxoaflAC7p_jVxLZtsf0U";
 
     /*
@@ -62,15 +63,13 @@ public class DisplayImage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_image);
 
-        /*ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setIcon(R.mipmap.ic_launcher);*/
 
         currentDT = new Date();
         final String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDT);
         final String time = new SimpleDateFormat("hh:mm").format(currentDT);
 
 
+        //Get location setting status, and if it is on then get location
         try {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             locationListener = new LocationListener() {
@@ -87,6 +86,7 @@ public class DisplayImage extends AppCompatActivity {
                 }
 
                 @Override
+                //If location is disabled by the user...
                 public void onProviderDisabled(String provider) {
                     ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\nTurn GPS on for location");
                 }
@@ -97,34 +97,41 @@ public class DisplayImage extends AppCompatActivity {
                 }, 1);
                 return;
             }
+            //Update location every 100 milliseconds
+            //minDistance parameter can be changed to make the app update location per distance
             locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
-            /*if (Camera.imageTempStore == null) {
-                ((TextView) findViewById(R.id.display_text)).setText("Error retrieving image");
-            } else {*/
+            byte[] imageByteArray = CameraLayout.imageAsByteArray;
 
+            //Convert the byte array into a bitmap image, rotate the image and resize it so that it doesn't take up too much space
+            if (imageByteArray == null) {
+                ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\nTurn GPS on for location\nError retrieving image.");
+            } else {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
-                byte[] bytes = CameraLayout.layout;
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
-                Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                Bitmap bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length, options);
                 rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 ((ImageView) findViewById(R.id.image_image)).setImageBitmap(rotatedImage);
-            //}
+            }
+
+            //Encode the image to send to the server
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
             byte[] imageBytes = baos.toByteArray();
             encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
             location = locationManager.getLastKnownLocation("gps");
-            // NULL POINTER EXCEPTION
             if (location != null) {
                 double loc = location.getLatitude();
                 double lat = location.getLongitude();
                 String degrees = convertCoordinatesToDegrees(loc, lat);
                 ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\n"+degrees); //Lat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100
             }
+
+            //Every time a photo is taken, the app will request a static map from google.
+            //It will also send IMU and location data to the server, along with the image.
             getCurrentMap(location);
             sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
@@ -143,21 +150,18 @@ public class DisplayImage extends AppCompatActivity {
             @Override
             public void run() {
 
-                //The following code will execute after the 3 seconds.
+                //After 3 seconds, the camera will automatically restart.
+                //This time can be increased if we want to give the user more time to look at the photo.
 
                 try {
-
-                    //Go to next page i.e, start the next activity.
                     Intent intent = new Intent(getApplicationContext(), CameraLayout.class);
                     startActivity(intent);
-
-                    //Let's Finish Splash Activity since we don't want to show this when user press back button.
                     finish();
                 } catch (Exception ignored) {
                     ignored.printStackTrace();
                 }
             }
-        }, 3000);  // Give a 3 seconds delay.
+        }, 3000);
     }
 
 
@@ -185,6 +189,7 @@ public class DisplayImage extends AppCompatActivity {
         }
     }
 
+    //Send photo, location, IMU and date/time to server as a JSON object
     private void sendUpdates(JSONObject jsonObject) {
 
         RequestQueue q = Volley.newRequestQueue(this);
@@ -197,7 +202,7 @@ public class DisplayImage extends AppCompatActivity {
         Response.ErrorListener failure = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("NOOOOOOOOOOOOOOOOOOO", error.toString());
+                Log.i("error sending to server", error.toString());
             }
         };
 
@@ -209,8 +214,8 @@ public class DisplayImage extends AppCompatActivity {
         q.add(req);
     }
 
+    //Create a JSON object to send to the server.
     private JSONObject makeJsonObject() {
-
 
         JSONObject o = new JSONObject();
         try {
@@ -243,6 +248,8 @@ public class DisplayImage extends AppCompatActivity {
         return o;
     }
 
+
+    //Get the static map of where the image was taken from Google Static Maps API
     private void getCurrentMap(Location location) {
         String url = "";
         try {
@@ -263,13 +270,15 @@ public class DisplayImage extends AppCompatActivity {
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
                         Log.i("MAP ERROR", error.toString());
-                        //mImageView.setImageResource(R.drawable.image_load_error);
                     }
                 });
-// Access the RequestQueue through your singleton class.
         q.add(request);
     }
 
+
+    //Helper method that converts coordinates from decimal to direction/degree/minute/second.
+    //This is easier for the user to understand and looks better.
+    //Could make a new class with static method to replace this method if this activity starts lagging.
     private String convertCoordinatesToDegrees (double latitude, double longitude) {
         StringBuilder builder = new StringBuilder();
 

@@ -27,13 +27,16 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+        //Start recording IMU data
         Intent serviceIntent = new Intent(this, AccelerometerService.class);
         startService(serviceIntent);
 
+        //Set global action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.mipmap.ic_launcher);
 
+        //Get all necessary permission as soon as app is opened for the first time
         PermissionManager permissionManager = PermissionManager.getInstance(this);
         permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), new PermissionManager.PermissionRequestListener() {
             @Override

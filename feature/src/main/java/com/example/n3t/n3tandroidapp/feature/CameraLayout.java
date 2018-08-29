@@ -1,26 +1,21 @@
 package com.example.n3t.n3tandroidapp.feature;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.hardware.Camera;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
+//Using deprecated camera class as it contains features required for this app.
 public class CameraLayout extends AppCompatActivity {
 
     Camera camera;
     FrameLayout fl;
     CameraClass cameraPreview;
     ImageButton click;
-    static byte[] layout;
+    static byte[] imageAsByteArray;
     boolean cameraAvailable = false;
 
 
@@ -50,7 +45,7 @@ public class CameraLayout extends AppCompatActivity {
     Camera.PictureCallback pic = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            layout = data;
+            imageAsByteArray = data;
             startActivity(new Intent(CameraLayout.this, DisplayImage.class));
             finish();
         }

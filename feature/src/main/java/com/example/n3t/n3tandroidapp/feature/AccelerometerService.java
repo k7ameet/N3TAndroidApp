@@ -24,6 +24,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Date;
 
+//Updates the server with the phones current accelerometer and location data every 'x' seconds.
+//x is currently 5 but can be changed in the OnStartCommand method.
+//Sends data as a JSON object using HTTP POST request.
 
 public class AccelerometerService extends Service implements SensorEventListener{
 
@@ -128,6 +131,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     }
 
+    //Create JSON object to send.
     private JSONObject makeJsonObject(double x, double y, double z) {
         JSONObject o = new JSONObject();
         try {
@@ -161,6 +165,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
 
+    //Update accelerometer readings whenever the phone moves.
     @Override
     public void onSensorChanged(SensorEvent event) {
         x = event.values[0];
