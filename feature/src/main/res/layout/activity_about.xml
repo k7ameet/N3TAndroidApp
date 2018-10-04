@@ -22,7 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="30dp"
             android:textColor="#008080"
-            android:text="This app is designed to make your rural road travels safer. You are using this app entirely on your own account.\n\nSafe travels from the N3T crew :)" />
+            android:text="The N3T Road Safety app is designed to make travelling on rural roads safer by using smart technology. \n\nThe use of this app doesn't substitute the driver having to be vigilant and attentive. \n\nWe wish you safe travel from the N3T crew:)" />
 
     </LinearLayout>
 

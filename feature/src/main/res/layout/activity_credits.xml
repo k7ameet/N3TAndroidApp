@@ -20,9 +20,9 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textColor="#008080"
-            android:text="Thank you for helping us to improve this app and thereby make rural roads safer.\n\nThis app wouldn't be around if not for..." />
+            android:text="Thank you for helping us to improve this app and thereby make rural roads safer.\n\nThis app wouldn't be around if not for the excellent work and insights of: Ameet Shah, LeThu Nguyen, John Houlker, Chris Forne, Martin Knoche, Huy Vuong Nguyen, Johnny Chien, Bert van den Berg, Barbara Ruhdorfer, Ed Varley, Joe Camuso, Michael Uhlenberg, Russell Watson and many others." />
 
     </LinearLayout>
 
