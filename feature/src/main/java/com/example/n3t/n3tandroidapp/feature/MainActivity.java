@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Start recording IMU data
-        /*Intent serviceIntent = new Intent(this, AccelerometerService.class);
-        startService(serviceIntent);*/
+        Intent serviceIntent = new Intent(this, AccelerometerService.class);
+        startService(serviceIntent);
 
         //Set global action bar
         ActionBar actionBar = getSupportActionBar();
