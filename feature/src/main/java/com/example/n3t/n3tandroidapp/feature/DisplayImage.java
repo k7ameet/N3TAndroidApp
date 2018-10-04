@@ -58,6 +58,8 @@ public class DisplayImage extends AppCompatActivity {
     private Bitmap rotatedImage;
     private String encodedImage = "";
 
+    private String polyline = "jlfyEi~gf`@|@gEJuAFiBLqBToB\\cB`@wAb@k@\\[j@Wb@K`B[|@SpA]^S\\WV_@Re@Pe@Hk@FwAJcCTgGl@qO@k@JaAXcAp@qAdAeBbDiF~C_FrCqEdAeBh@cAd@mAv@cBRYZS`Ae@VI`AGdAGr@C~@Fp@@p@Eb@G\\Kb@QfAo@P[Je@@MC]Mg@WUUOo@W_@S[]GSEYBe@Li@t@qB\\oAJi@`@}B\\_CZ_CTuAhAiEj@wBNg@Xu@V_@PMz@m@j@i@T[Tk@XkA\\mAVa@Z[^S^Q^WRYPg@PmAHeBTeAVk@z@mBz@mBl@gAt@u@vAw@d@w@X_AjAgEfDyLdBuG^wBF}A@wAK{AG_C?cC?sBI{@So@a@aAg@yAWcAIk@GeAJiBRuA\\uBJ_B@wAByAF_BGiAUyAQsAE}@BgALuAXaCJg@^oA~@_Dn@uBzAqFl@uB`AcCfCkG`BmE^iAHo@FqA?E?WIe@Ii@Si@e@kAkC_G{@mBQg@Mg@Ec@@i@\\eBJi@f@iAj@eA\\g@l@g@b@YZ]Ta@Ji@Fk@Bk@BwAF}@TcAj@iALa@Fi@PcC\\gGV{EBk@Fs@Fa@Rc@R[Vi@\\oAHi@XaCd@eGD}@Jm@Ni@Ne@f@iAVk@h@{@nAoBt@mBh@mBRuANuAFsBHgEFs@Ni@\\mA`@}ChB_ML}@Hu@BcA?aACwBE}EG}ECwAAwAHiAVwATo@h@eAj@gANg@Hi@JwAHwAVmDp@}IPaC@OYMi@OoAYgB[gA_@i@o@Sc@Ii@YaCUaCWaC]}BKi@Cg@Lu@x@qB";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,8 +254,13 @@ public class DisplayImage extends AppCompatActivity {
     //Get the static map of where the image was taken from Google Static Maps API
     private void getCurrentMap(Location location) {
         String url = "";
+        //getDirections();
         try {
-            url = "http://maps.google.com/maps/api/staticmap?center=" + location.getLatitude() + "," + location.getLongitude() + "&zoom=15&maptype=roadmap&size=200x200&sensor=false&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
+            //For actual testing and app:
+            //url = "http://maps.google.com/maps/api/staticmap?path=enc%3A"+polyline+"&maptype=satellite&size=800x800&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
+
+            //Temporary for displaying while outside of specified location:
+            url = "http://maps.google.com/maps/api/staticmap?path=weight:10|enc%3A"+polyline+"&maptype=satellite&size=800x800&markers=size:large%7Ccolor:green%7C-35.776801, 174.266028&sensor=false&key=" + API_KEY;
         } catch (Exception e) {
             Log.i("URL ERROR", e.toString());
             return;
@@ -273,6 +280,38 @@ public class DisplayImage extends AppCompatActivity {
                     }
                 });
         q.add(request);
+    }
+
+    // In the future, if we need to find the polyline of a road.
+    // Currently using the constant polyline of Otaika Valley Road so this method is not in use.
+    private void getDirections() {
+        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-35.755098, 174.207892&destination=-35.780766, 174.307630&mode=driving&key="+API_KEY;
+
+        RequestQueue q = Volley.newRequestQueue(this);
+
+        JsonObjectRequest request = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String s = "";
+                        try {
+                            s = response.getString("points");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.i("DIRECTIONS", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("DIRECTION ERROR", error.toString());
+
+                    }
+                });
+        q.add(request);
+
     }
 
 
