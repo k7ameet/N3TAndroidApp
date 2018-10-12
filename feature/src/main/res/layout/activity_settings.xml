@@ -6,4 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".Settings">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/personal_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="50dp"
+            android:background="#ffffff"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Personal Profile"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+
+        <Button
+            android:id="@+id/coordinate_system"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:text="Coordinate System"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+
+        <Button
+            android:id="@+id/crowd_sharing"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:text="Crowd Sharing"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+
+        <Button
+            android:id="@+id/vehicle_type"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:text="Vehicle Type"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+
+        <Button
+            android:id="@+id/vehicle_load"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:text="Vehicle Load"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+
+        <Button
+            android:id="@+id/alert_output"
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:text="Alert Output"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080"
+            tools:layout_editor_absoluteX="52dp"
+            tools:layout_editor_absoluteY="73dp" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
