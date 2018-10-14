@@ -3,4 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="97dp"
+            android:textSize="30dp"
+            android:text="ALERT"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_dark"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="556dp"
+            android:textSize="25dp"
+            android:text="The alert text. The colour of the alert on top can change depending on how serious the issue is."
+            android:textAlignment="center" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

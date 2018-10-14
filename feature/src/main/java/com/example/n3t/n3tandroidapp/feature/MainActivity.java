@@ -1,10 +1,16 @@
 package com.example.n3t.n3tandroidapp.feature;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,7 +19,6 @@ import com.intentfilter.androidpermissions.PermissionManager;
 import static java.util.Collections.singleton;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     Button exit, start, options;
@@ -104,10 +109,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        permissionManager.checkPermissions(singleton(Manifest.permission.READ_PHONE_STATE), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
 
-        exit = (Button)findViewById(R.id.exit_btn);
-        start = (Button)findViewById(R.id.start_taking_photos_btn);
-        options = (Button)findViewById(R.id.options_btn);
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
+
+        exit = (Button) findViewById(R.id.exit_btn);
+        start = (Button) findViewById(R.id.start_taking_photos_btn);
+        options = (Button) findViewById(R.id.options_btn);
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +148,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Options.class));
             }
         });
+
+        String s = Build.SERIAL;
+
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            }
+            String imei = telephonyManager.getImei();
+            if (imei != null) {
+                DetailsStore.setIMEI(imei);
+            }
+        } catch (Exception e){
+            Log.i("Error getting IMEI", e.getMessage());
+        }
     }
 
 }
