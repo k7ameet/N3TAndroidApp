@@ -46,6 +46,8 @@ public class DisplayImage extends AppCompatActivity {
     private Location location;
     private Date currentDT;
 
+    byte[] imageByteArray;
+
     //Google API key needed for any Google API service used, in this case for the static maps
     private String API_KEY = "AIzaSyDFWj6I9Ip1POrxoaflAC7p_jVxLZtsf0U";
 
@@ -69,6 +71,7 @@ public class DisplayImage extends AppCompatActivity {
         currentDT = new Date();
         final String date = new SimpleDateFormat("dd/MM/yyyy").format(currentDT);
         final String time = new SimpleDateFormat("hh:mm").format(currentDT);
+        
 
 
         //Get location setting status, and if it is on then get location
@@ -103,7 +106,7 @@ public class DisplayImage extends AppCompatActivity {
             //minDistance parameter can be changed to make the app update location per distance
             locationManager.requestLocationUpdates("gps", 100, 0, locationListener);
 
-            byte[] imageByteArray = CameraLayout.imageAsByteArray;
+            imageByteArray = CameraLayout.imageAsByteArray;
 
             //Convert the byte array into a bitmap image, rotate the image and resize it so that it doesn't take up too much space
             if (imageByteArray == null) {
@@ -119,10 +122,12 @@ public class DisplayImage extends AppCompatActivity {
             }
 
             //Encode the image to send to the server
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //Out of service
+
+            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
             byte[] imageBytes = baos.toByteArray();
-            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
 
             location = locationManager.getLastKnownLocation("gps");
             if (location != null) {
@@ -133,12 +138,12 @@ public class DisplayImage extends AppCompatActivity {
             }
 
             //Every time a photo is taken, the app will request a static map from google.
-            //It will also send IMU and location data to the server, along with the image.
+            //It will also send IMU and location data to the server, along with the image.(out of service)
             getCurrentMap(location);
-            sendUpdates(makeJsonObject());
+            // sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();
-            CharSequence text = "Error: this photo was not sent to server";
+            CharSequence text = "Error displaying image";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();

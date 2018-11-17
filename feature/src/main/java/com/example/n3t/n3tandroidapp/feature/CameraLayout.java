@@ -46,7 +46,8 @@ public class CameraLayout extends AppCompatActivity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             imageAsByteArray = data;
-            startActivity(new Intent(CameraLayout.this, DisplayImage.class));
+            Intent intent = new Intent(CameraLayout.this, DisplayImage.class);
+            startActivity(intent);
             finish();
         }
     };
