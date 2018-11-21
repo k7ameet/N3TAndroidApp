@@ -142,6 +142,9 @@ public class DisplayImage extends AppCompatActivity {
             //Every time a photo is taken, the app will request a static map from google.
             //It will also send IMU and location data to the server, along with the image.(out of service)
             getCurrentMap(location);
+            LoggingFileHandler logger = new LoggingFileHandler();
+            String locationString = convertCoordinatesToDegrees(location.getLatitude(), location.getLongitude());
+            logger.addLog(locationString, currentDT);
             // sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();
