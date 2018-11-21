@@ -13,6 +13,7 @@ public class CameraClass extends SurfaceView implements SurfaceHolder.Callback {
 
     Camera camera;
     SurfaceHolder holder;
+    static boolean isCameraOpen = false;
 
     public CameraClass(Context context, Camera camera) {
         super(context);
@@ -50,6 +51,7 @@ public class CameraClass extends SurfaceView implements SurfaceHolder.Callback {
             camera.setPreviewDisplay(holder);
         } catch (IOException e){}
         camera.startPreview();
+        isCameraOpen = true;
 
     }
 
@@ -62,6 +64,7 @@ public class CameraClass extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         camera.stopPreview();
         camera.release();
+        isCameraOpen = false;
 
     }
 }

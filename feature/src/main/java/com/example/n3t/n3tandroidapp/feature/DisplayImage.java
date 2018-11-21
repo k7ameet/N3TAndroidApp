@@ -58,6 +58,7 @@ public class DisplayImage extends AppCompatActivity {
     */
 
     private Bitmap rotatedImage;
+    private Bitmap bitmapImage;
     private String encodedImage = "";
 
     private String polyline = "jlfyEi~gf`@|@gEJuAFiBLqBToB\\cB`@wAb@k@\\[j@Wb@K`B[|@SpA]^S\\WV_@Re@Pe@Hk@FwAJcCTgGl@qO@k@JaAXcAp@qAdAeBbDiF~C_FrCqEdAeBh@cAd@mAv@cBRYZS`Ae@VI`AGdAGr@C~@Fp@@p@Eb@G\\Kb@QfAo@P[Je@@MC]Mg@WUUOo@W_@S[]GSEYBe@Li@t@qB\\oAJi@`@}B\\_CZ_CTuAhAiEj@wBNg@Xu@V_@PMz@m@j@i@T[Tk@XkA\\mAVa@Z[^S^Q^WRYPg@PmAHeBTeAVk@z@mBz@mBl@gAt@u@vAw@d@w@X_AjAgEfDyLdBuG^wBF}A@wAK{AG_C?cC?sBI{@So@a@aAg@yAWcAIk@GeAJiBRuA\\uBJ_B@wAByAF_BGiAUyAQsAE}@BgALuAXaCJg@^oA~@_Dn@uBzAqFl@uB`AcCfCkG`BmE^iAHo@FqA?E?WIe@Ii@Si@e@kAkC_G{@mBQg@Mg@Ec@@i@\\eBJi@f@iAj@eA\\g@l@g@b@YZ]Ta@Ji@Fk@Bk@BwAF}@TcAj@iALa@Fi@PcC\\gGV{EBk@Fs@Fa@Rc@R[Vi@\\oAHi@XaCd@eGD}@Jm@Ni@Ne@f@iAVk@h@{@nAoBt@mBh@mBRuANuAFsBHgEFs@Ni@\\mA`@}ChB_ML}@Hu@BcA?aACwBE}EG}ECwAAwAHiAVwATo@h@eAj@gANg@Hi@JwAHwAVmDp@}IPaC@OYMi@OoAYgB[gA_@i@o@Sc@Ii@YaCUaCWaC]}BKi@Cg@Lu@x@qB";
@@ -116,9 +117,10 @@ public class DisplayImage extends AppCompatActivity {
                 matrix.postRotate(90);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
-                Bitmap bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length, options);
+                bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length, options);
                 rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 ((ImageView) findViewById(R.id.image_image)).setImageBitmap(rotatedImage);
+
             }
 
             //Encode the image to send to the server
@@ -161,6 +163,8 @@ public class DisplayImage extends AppCompatActivity {
                 //This time can be increased if we want to give the user more time to look at the photo.
 
                 try {
+                    bitmapImage.recycle();
+                    rotatedImage.recycle();
                     Intent intent = new Intent(getApplicationContext(), CameraLayout.class);
                     startActivity(intent);
                     finish();

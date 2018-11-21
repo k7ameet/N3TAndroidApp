@@ -33,10 +33,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Start recording IMU data
-        // This service is still in the making, and is therefore not being used
+        // This service is still under development, and is therefore not being used
 
         /*Intent serviceIntent = new Intent(this, AccelerometerService.class);
         startService(serviceIntent);*/
+
+        // Service for voice recording
+
+        Intent serviceIntent1 = new Intent(this, VoiceService.class);
+        startService(serviceIntent1);
 
         //Set global action bar
         ActionBar actionBar = getSupportActionBar();
