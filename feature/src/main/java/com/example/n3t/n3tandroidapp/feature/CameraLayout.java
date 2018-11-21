@@ -11,12 +11,12 @@ import android.widget.ImageButton;
 //Using deprecated camera class as it contains features required for this app.
 public class CameraLayout extends AppCompatActivity {
 
-    Camera camera;
+    static Camera camera;
     FrameLayout fl;
     CameraClass cameraPreview;
     ImageButton click;
     static byte[] imageAsByteArray;
-    boolean cameraAvailable = false;
+    static boolean cameraAvailable = false;
 
 
     @Override
@@ -58,5 +58,11 @@ public class CameraLayout extends AppCompatActivity {
             cameraAvailable = false;
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

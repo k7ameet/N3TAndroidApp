@@ -2,6 +2,7 @@ package com.example.n3t.n3tandroidapp.feature;
 
 import android.app.Service;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognitionListener;
@@ -115,8 +116,11 @@ public class VoiceService extends Service {
     private void process(String s){
         s = s.toLowerCase();
         if (s.indexOf("photo") != -1){
-            if (!CameraClass.isCameraOpen){
-                Log.i("PHOTO","PHOTO");
+            if (CameraClass.isCameraOpen){
+                if(CameraLayout.camera != null && CameraLayout.cameraAvailable) {
+                    CameraLayout.camera.takePicture(null, null, pic);
+                    CameraLayout.cameraAvailable = false;
+                }
             } else {
                 Log.i("PHOTO", "CAMERA CLOSED");
             }
@@ -134,4 +138,14 @@ public class VoiceService extends Service {
         speechRecognizer.startListening(intent1);
 
     }
+
+    Camera.PictureCallback pic = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            CameraLayout.imageAsByteArray = data;
+            Intent intent = new Intent(VoiceService.this, DisplayImage.class);
+            startActivity(intent);
+
+        }
+    };
 }
