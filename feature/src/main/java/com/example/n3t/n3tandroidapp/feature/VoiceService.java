@@ -2,12 +2,15 @@ package com.example.n3t.n3tandroidapp.feature;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognitionListener;
@@ -26,7 +29,7 @@ public class VoiceService extends Service {
     private double lat = -50000;
     private double lon = -50000;
     private Date currentDT;
-    private String locationString;
+    private String locationString = "GPS OFF";
 
     private SpeechRecognizer speechRecognizer;
 
@@ -59,7 +62,7 @@ public class VoiceService extends Service {
 
             @Override
             public void onProviderDisabled(String provider) {
-                locationString = "GPS OFF";
+
             }
         };
 
@@ -81,6 +84,15 @@ public class VoiceService extends Service {
                     synchronized (this) {
                         try {
                             wait(5000);
+                            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                            if (mWifi.isConnected()) {
+                                Log.i("WIFI", "CONNECTED");
+                                LoggingFileHandler.sendFileToServer();
+                            } else {
+                                Log.i("WIFI", "NOT CONNECTED");
+                            }
                             Log.i("VOICE SERVICE", "5 SECOND LOOP");
                         } catch (java.lang.InterruptedException e) {
                             Log.i("VOICE SERVICE", "LOOP ERROR");
@@ -179,7 +191,7 @@ public class VoiceService extends Service {
             }
             currentDT = new Date();
             LoggingFileHandler logger = new LoggingFileHandler();
-            logger.addLog(locationString, currentDT);
+            logger.addLogNoImage(locationString, currentDT);
         }
         else {
             Log.i("SOMETHING ELSE", "SOMETHING ELSE");

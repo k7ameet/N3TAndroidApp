@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class DisplayImage extends AppCompatActivity {
     private LocationListener locationListener;
     private Location location;
     private Date currentDT;
+    private String logLocation = "GPS OFF";
 
     byte[] imageByteArray;
 
@@ -120,22 +122,26 @@ public class DisplayImage extends AppCompatActivity {
                 bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length, options);
                 rotatedImage = Bitmap.createBitmap(bitmapImage, 0, 0, bitmapImage.getWidth(), bitmapImage.getHeight(), matrix, true);
                 ((ImageView) findViewById(R.id.image_image)).setImageBitmap(rotatedImage);
+                MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(), rotatedImage, currentDT.toString(), "");
 
             }
 
             //Encode the image to send to the server
-            //Out of service
 
-            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
             byte[] imageBytes = baos.toByteArray();
-            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
+            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            Log.i("Encoded image", encodedImage);
+
+            // Display location underneath image
 
             location = locationManager.getLastKnownLocation("gps");
             if (location != null) {
                 double loc = location.getLatitude();
                 double lat = location.getLongitude();
                 String degrees = convertCoordinatesToDegrees(loc, lat);
+                logLocation = convertCoordinatesToDegrees(loc, lat);
                 ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\n"+degrees); //Lat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100
             }
 
@@ -143,8 +149,8 @@ public class DisplayImage extends AppCompatActivity {
             //It will also send IMU and location data to the server, along with the image.(out of service)
             getCurrentMap(location);
             LoggingFileHandler logger = new LoggingFileHandler();
-            String locationString = convertCoordinatesToDegrees(location.getLatitude(), location.getLongitude());
-            logger.addLog(locationString, currentDT);
+            //logger.addLogYesImage(logLocation, currentDT, encodedImage);  ENABLE THIS AND DISABLE BELOW FOR PHOTO UPLOAD
+            logger.addLogNoImage(logLocation, currentDT);
             // sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();

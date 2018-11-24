@@ -127,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        permissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_NETWORK_STATE), new PermissionManager.PermissionRequestListener() {
+            @Override
+            public void onPermissionGranted() {
+
+            }
+
+            @Override
+            public void onPermissionDenied() {
+
+            }
+        });
 
         exit = (Button) findViewById(R.id.exit_btn);
         start = (Button) findViewById(R.id.start_taking_photos_btn);
