@@ -17,7 +17,8 @@ import java.util.Date;
 public class LoggingFileHandler {
 
     private String FILE_NAME = "n3t_log.txt";
-    private static String url = "https://n3t-api.herokuapp.com/file";
+    private static String url = "https://n3t-kiwi.herokuapp.com/sendAndroidFileToS3";
+    private static String key = "E8183EC391BE4C27C952712BC2F97";
 
 
     public void addLogNoImage(String location, Date date){
@@ -65,19 +66,23 @@ public class LoggingFileHandler {
                     if (!root.exists()){
                         return;
                     }
-                    File file = new File(root, "n3t_log.txt");
+                    final File file = new File(root, "n3t_log.txt");
                     if (!file.exists()){
                         Log.i("FILE SENDING", "NO FILE");
                         return;
                     }
+                    Date date = new Date();
+                    File file1 = new File(date.toString()+".txt");
+                    file.renameTo(file1);
                     RequestParams params = new RequestParams();
-                    params.put("n3t_log", file);
+                    params.put(key, file);
                     AsyncHttpClient client = new AsyncHttpClient();
+                    client.setTimeout(20000);
                     client.post(url, params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                             Log.i("FILE SENDING", "SUCCESS");
-                            deleteLogs();
+                            deleteLogs(file);
                         }
 
                         @Override
@@ -95,17 +100,9 @@ public class LoggingFileHandler {
 
     }
 
-    private static void deleteLogs () {
+    private static void deleteLogs (File file) {
         try {
-            File root = new File(Environment.getExternalStorageDirectory(), "N3T");
-            if (!root.exists()) {
-                return;
-            }
-            File file = new File(root, "n3t_log.txt");
-            if (file.exists()) {
-                file.delete();
-                Log.i("FILE DELETE", "SUCCESS");
-            }
+            file.delete();
         }catch(Exception e){
             Log.i("FILE DELETE", "ERROR");
         }

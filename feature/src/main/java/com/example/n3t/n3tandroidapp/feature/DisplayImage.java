@@ -149,8 +149,8 @@ public class DisplayImage extends AppCompatActivity {
             //It will also send IMU and location data to the server, along with the image.(out of service)
             getCurrentMap(location);
             LoggingFileHandler logger = new LoggingFileHandler();
-            //logger.addLogYesImage(logLocation, currentDT, encodedImage);  ENABLE THIS AND DISABLE BELOW FOR PHOTO UPLOAD
-            logger.addLogNoImage(logLocation, currentDT);
+            logger.addLogYesImage(logLocation, currentDT, encodedImage);  // ENABLE THIS AND DISABLE BELOW FOR PHOTO UPLOAD
+            //logger.addLogNoImage(logLocation, currentDT);
             // sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){
             Context context = getApplicationContext();
