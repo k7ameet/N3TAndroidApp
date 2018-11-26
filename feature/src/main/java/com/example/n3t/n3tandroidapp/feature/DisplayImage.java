@@ -46,7 +46,8 @@ public class DisplayImage extends AppCompatActivity {
     private LocationListener locationListener;
     private Location location;
     private Date currentDT;
-    private String logLocation = "GPS OFF";
+    private double logLat = -1000;
+    private double logLon = -1000;
 
     byte[] imageByteArray;
 
@@ -138,10 +139,11 @@ public class DisplayImage extends AppCompatActivity {
 
             location = locationManager.getLastKnownLocation("gps");
             if (location != null) {
-                double loc = location.getLatitude();
-                double lat = location.getLongitude();
-                String degrees = convertCoordinatesToDegrees(loc, lat);
-                logLocation = convertCoordinatesToDegrees(loc, lat);
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
+                String degrees = convertCoordinatesToDegrees(lat, lon);
+                logLat = lat;
+                logLon = lon;
                 ((TextView) findViewById(R.id.display_text)).setText("Date: "+date+", Time: "+time+"\n"+degrees); //Lat: " + Math.round(location.getLatitude() * 100) / 100 + "\nLon: " + Math.round(location.getLongitude() * 100) / 100
             }
 
@@ -149,7 +151,7 @@ public class DisplayImage extends AppCompatActivity {
             //It will also send IMU and location data to the server, along with the image.(out of service)
             getCurrentMap(location);
             LoggingFileHandler logger = new LoggingFileHandler();
-            logger.addLogYesImage(logLocation, currentDT, encodedImage);  // ENABLE THIS AND DISABLE BELOW FOR PHOTO UPLOAD
+            logger.addLog(logLat, logLon , currentDT, encodedImage);  // ENABLE THIS AND DISABLE BELOW FOR PHOTO UPLOAD
             //logger.addLogNoImage(logLocation, currentDT);
             // sendUpdates(makeJsonObject());
         }catch(OutOfMemoryError oom){

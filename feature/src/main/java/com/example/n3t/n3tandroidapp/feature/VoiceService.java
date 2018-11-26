@@ -26,10 +26,9 @@ public class VoiceService extends Service {
 
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private double lat = -50000;
-    private double lon = -50000;
+    private double lat = -1000;
+    private double lon = -1000;
     private Date currentDT;
-    private String locationString = "GPS OFF";
 
     private SpeechRecognizer speechRecognizer;
 
@@ -83,7 +82,7 @@ public class VoiceService extends Service {
                 while (1 == 1) {
                     synchronized (this) {
                         try {
-                            wait(5000);
+                            wait(60000);
                             ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                             NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -186,12 +185,9 @@ public class VoiceService extends Service {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            if(lat!=-50000&&lon!=-50000){
-                locationString = convertCoordinatesToDegrees(lat, lon);
-            }
             currentDT = new Date();
             LoggingFileHandler logger = new LoggingFileHandler();
-            logger.addLogNoImage(locationString, currentDT);
+            logger.addLog(lat, lon, currentDT, "-1000");
         }
         else {
             Log.i("SOMETHING ELSE", "SOMETHING ELSE");
@@ -219,45 +215,5 @@ public class VoiceService extends Service {
         locationManager.removeUpdates(locationListener);
     }
 
-    //Helper method that converts coordinates from decimal to direction/degree/minute/second.
-    //This is easier for the user to understand and looks better.
-    //Could make a new class with static method to replace this method if this activity starts lagging.
-    private String convertCoordinatesToDegrees (double latitude, double longitude) {
-        StringBuilder builder = new StringBuilder();
-
-        if (latitude < 0) {
-            builder.append("Lat: S ");
-        } else {
-            builder.append("Lat: N ");
-        }
-
-        String latitudeDegrees = Location.convert(Math.abs(latitude), Location.FORMAT_SECONDS);
-        String[] latitudeSplit = latitudeDegrees.split(":");
-        builder.append(latitudeSplit[0]);
-        builder.append("°");
-        builder.append(latitudeSplit[1]);
-        builder.append("'");
-        builder.append(latitudeSplit[2]);
-        builder.append("\"");
-
-        builder.append("\n");
-
-        if (longitude < 0) {
-            builder.append("Lon: W ");
-        } else {
-            builder.append("Lon: E ");
-        }
-
-        String longitudeDegrees = Location.convert(Math.abs(longitude), Location.FORMAT_SECONDS);
-        String[] longitudeSplit = longitudeDegrees.split(":");
-        builder.append(longitudeSplit[0]);
-        builder.append("°");
-        builder.append(longitudeSplit[1]);
-        builder.append("'");
-        builder.append(longitudeSplit[2]);
-        builder.append("\"");
-
-        return builder.toString();
-    }
 
 }

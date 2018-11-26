@@ -21,7 +21,7 @@ public class LoggingFileHandler {
     private static String key = "E8183EC391BE4C27C952712BC2F97";
 
 
-    public void addLogNoImage(String location, Date date){
+    public void addLog(Double lat, Double lon, Date date, String image){
 
         try {
             File root = new File(Environment.getExternalStorageDirectory(), "N3T");
@@ -30,24 +30,10 @@ public class LoggingFileHandler {
             }
             File file = new File(root, FILE_NAME);
             FileWriter writer = new FileWriter(file, true);
-            writer.append("Location: "+location+", Time: "+date+"\n");
-            writer.flush();
-            writer.close();
-        }catch (Exception e){
-            Log.i("ERROR IN LOGGING", e.toString());
-        }
-    }
-
-    public void addLogYesImage(String location, Date date, String image){
-
-        try {
-            File root = new File(Environment.getExternalStorageDirectory(), "N3T");
-            if (!root.exists()) {
-                root.mkdirs();
+            if(file.exists() && file.length() == 0){
+                writer.append("Longitude Latitude Date Image\n");
             }
-            File file = new File(root, FILE_NAME);
-            FileWriter writer = new FileWriter(file, true);
-            writer.append("Location: "+location+", Time: "+date+", Image: "+image+"\n");
+            writer.append(lon+" "+lat+" "+date+" "+image+"\n");
             writer.flush();
             writer.close();
         }catch (Exception e){
@@ -66,23 +52,25 @@ public class LoggingFileHandler {
                     if (!root.exists()){
                         return;
                     }
-                    final File file = new File(root, "n3t_log.txt");
+                    File file = new File(root, "n3t_log.txt");
                     if (!file.exists()){
                         Log.i("FILE SENDING", "NO FILE");
                         return;
                     }
                     Date date = new Date();
-                    File file1 = new File(date.toString()+".txt");
-                    file.renameTo(file1);
+                    final String s = date.toString()+".txt";
+                    renameFile(file, s);
+                    File file1 = new File(root, s);
+                    Log.i("NAMECHANGE", file1.getName());
                     RequestParams params = new RequestParams();
-                    params.put(key, file);
+                    params.put(key, file1);
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.setTimeout(20000);
+                    client.setTimeout(60000);
                     client.post(url, params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                             Log.i("FILE SENDING", "SUCCESS");
-                            deleteLogs(file);
+                            deleteLogs(s);
                         }
 
                         @Override
@@ -100,12 +88,31 @@ public class LoggingFileHandler {
 
     }
 
-    private static void deleteLogs (File file) {
+    private static void deleteLogs (String name) {
         try {
+            File root = new File(Environment.getExternalStorageDirectory(), "N3T");
+            if (!root.exists()){
+                return;
+            }
+            File file = new File(root, name);
+            if (!file.exists()){
+                Log.i("FILE SENDING", "NO FILE");
+                return;
+            }
             file.delete();
         }catch(Exception e){
             Log.i("FILE DELETE", "ERROR");
         }
+    }
+
+    public static boolean renameFile(File toBeRenamed, String new_name) {
+        //need to be in the same path
+        File fileWithNewName = new File(toBeRenamed.getParent(), new_name);
+        if (fileWithNewName.exists()) {
+            return false;
+        }
+        // Rename file (or directory)
+        return toBeRenamed.renameTo(fileWithNewName);
     }
 
 }
