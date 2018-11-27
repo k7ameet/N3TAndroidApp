@@ -313,10 +313,10 @@ public class DisplayImage extends AppCompatActivity {
         //getDirections();
         try {
             //For actual testing and app:
-            //url = "http://maps.google.com/maps/api/staticmap?path=enc%3A"+polyline+"&maptype=satellite&size=800x800&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
+            url = "http://maps.google.com/maps/api/staticmap?centre=" + location.getLatitude() + "," + location.getLongitude() + "&maptype=satellite&size=800x800&markers=size:mid%7Ccolor:green%7C" + location.getLatitude() + "," + location.getLongitude() + "&key=" + API_KEY;
 
             //Temporary for displaying while outside of specified location:
-            url = "http://maps.google.com/maps/api/staticmap?path=weight:10|enc%3A"+polyline+"&maptype=satellite&size=800x800&markers=size:large%7Ccolor:green%7C-35.776801, 174.266028&sensor=false&key=" + API_KEY;
+            //url = "http://maps.google.com/maps/api/staticmap?path=weight:10|enc%3A"+polyline+"&maptype=satellite&size=800x800&markers=size:large%7Ccolor:green%7C-35.776801, 174.266028&sensor=false&key=" + API_KEY;
         } catch (Exception e) {
             Log.i("URL ERROR", e.toString());
             return;
