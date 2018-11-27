@@ -10,13 +10,14 @@ import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,10 +30,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -62,7 +68,7 @@ public class DisplayImage extends AppCompatActivity {
 
     private Bitmap rotatedImage;
     private Bitmap bitmapImage;
-    private String encodedImage = "";
+    private String encodedImage = "-1000";
 
     private String polyline = "jlfyEi~gf`@|@gEJuAFiBLqBToB\\cB`@wAb@k@\\[j@Wb@K`B[|@SpA]^S\\WV_@Re@Pe@Hk@FwAJcCTgGl@qO@k@JaAXcAp@qAdAeBbDiF~C_FrCqEdAeBh@cAd@mAv@cBRYZS`Ae@VI`AGdAGr@C~@Fp@@p@Eb@G\\Kb@QfAo@P[Je@@MC]Mg@WUUOo@W_@S[]GSEYBe@Li@t@qB\\oAJi@`@}B\\_CZ_CTuAhAiEj@wBNg@Xu@V_@PMz@m@j@i@T[Tk@XkA\\mAVa@Z[^S^Q^WRYPg@PmAHeBTeAVk@z@mBz@mBl@gAt@u@vAw@d@w@X_AjAgEfDyLdBuG^wBF}A@wAK{AG_C?cC?sBI{@So@a@aAg@yAWcAIk@GeAJiBRuA\\uBJ_B@wAByAF_BGiAUyAQsAE}@BgALuAXaCJg@^oA~@_Dn@uBzAqFl@uB`AcCfCkG`BmE^iAHo@FqA?E?WIe@Ii@Si@e@kAkC_G{@mBQg@Mg@Ec@@i@\\eBJi@f@iAj@eA\\g@l@g@b@YZ]Ta@Ji@Fk@Bk@BwAF}@TcAj@iALa@Fi@PcC\\gGV{EBk@Fs@Fa@Rc@R[Vi@\\oAHi@XaCd@eGD}@Jm@Ni@Ne@f@iAVk@h@{@nAoBt@mBh@mBRuANuAFsBHgEFs@Ni@\\mA`@}ChB_ML}@Hu@BcA?aACwBE}EG}ECwAAwAHiAVwATo@h@eAj@gANg@Hi@JwAHwAVmDp@}IPaC@OYMi@OoAYgB[gA_@i@o@Sc@Ii@YaCUaCWaC]}BKi@Cg@Lu@x@qB";
 
@@ -129,11 +135,41 @@ public class DisplayImage extends AppCompatActivity {
 
             //Encode the image to send to the server
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            rotatedImage.compress(Bitmap.CompressFormat.PNG, 0, baos);
+            /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            rotatedImage.compress(Bitmap.CompressFormat.JPEG, 20, baos);
             byte[] imageBytes = baos.toByteArray();
-            encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            Log.i("Encoded image", encodedImage);
+            encodedImage = Base64.getEncoder().withoutPadding().encodeToString(imageBytes);
+            Log.i("Encoded image", encodedImage);*/
+
+            if (rotatedImage != null) {
+                Uri uri = bitToUri(rotatedImage);
+                if(uri != null) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 4;
+                    options.inPurgeable = true;
+                    Bitmap bm = BitmapFactory.decodeFile(uri.getPath(), options);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                    bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+                    byte[] byteImage_photo = baos.toByteArray();
+                    encodedImage = Base64.getEncoder().encodeToString(byteImage_photo);
+                    Log.i("Encoded image", encodedImage);
+                }
+            }
+
+            try {
+                File tempDir = Environment.getExternalStorageDirectory();
+                tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+                FileUtils.deleteDirectory(tempDir);
+                Log.i("TEMP FILE", "DELETED");
+            } catch(Exception e){
+                Log.i("TEMP FILE", "NOT DELETED");
+            }
+
+
+
+            //Log.i("URI", uri.toString());
 
             // Display location underneath image
 
@@ -374,6 +410,27 @@ public class DisplayImage extends AppCompatActivity {
         builder.append("\"");
 
         return builder.toString();
+    }
+
+    private Uri bitToUri (Bitmap bitmap) {
+        try {
+            File tempDir = Environment.getExternalStorageDirectory();
+            tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+            tempDir.mkdir();
+            File tempFile = File.createTempFile("tempImage", ".jpg", tempDir);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            byte[] bitmapData = bytes.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = new FileOutputStream(tempFile);
+            fos.write(bitmapData);
+            fos.flush();
+            fos.close();
+            return Uri.fromFile(tempFile);
+        } catch (Exception e){
+            return null;
+        }
     }
 
 }

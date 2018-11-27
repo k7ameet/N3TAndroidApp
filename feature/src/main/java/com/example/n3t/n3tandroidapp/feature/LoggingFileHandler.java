@@ -33,7 +33,7 @@ public class LoggingFileHandler {
             if(file.exists() && file.length() == 0){
                 writer.append("Longitude Latitude Date Image\n");
             }
-            writer.append(lon+" "+lat+" "+date+" "+image+"\n");
+            writer.append(lon+", "+lat+", "+date+", "+image+"\n");
             writer.flush();
             writer.close();
         }catch (Exception e){
