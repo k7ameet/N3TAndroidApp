@@ -95,6 +95,9 @@ public class VoiceService extends Service {
                             } else {
                                 Log.i("WIFI", "NOT CONNECTED");
                             }
+                            if(Settings.voiceOn){
+                                reset();
+                            }
                             Log.i("VOICE SERVICE", "1 MINUTE LOOP");
                         } catch (java.lang.InterruptedException e) {
                             Log.i("VOICE SERVICE", "LOOP ERROR");
@@ -232,19 +235,23 @@ public class VoiceService extends Service {
 
     @Override
     public void onDestroy() {
-
+        super.onDestroy();
         locationManager.removeUpdates(locationListener);
         speechRecognizer.destroy();
         runner = false;
         Log.i("VS", "DESTROYED");
-        super.onDestroy();
-
     }
 
     @Override
     public void onCreate(){
         super.onCreate();
         Log.i("VS", "CREATED");
+    }
+
+    public void reset() {
+        Intent intent = new Intent(VoiceService.this, VoiceService.class);
+        stopService(intent);
+        startService(intent);
     }
 
 }
