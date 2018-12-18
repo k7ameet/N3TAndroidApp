@@ -96,6 +96,20 @@
             android:gravity="start|center_vertical"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="#008080" />
+
+        <Button
+            android:id="@+id/voice_option"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:padding="10dp"
+            android:text="Voice Control : Off"
+            android:gravity="start|center_vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#008080" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

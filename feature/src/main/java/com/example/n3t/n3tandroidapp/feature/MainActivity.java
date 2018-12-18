@@ -39,9 +39,11 @@ public class MainActivity extends AppCompatActivity {
         startService(serviceIntent);*/
 
         // Service for voice recording
+        // In a later update, launching of this service was moved to "Settings" activity
+        // Option still remains to start from here
 
-        Intent serviceIntent1 = new Intent(this, VoiceService.class);
-        startService(serviceIntent1);
+        /*Intent serviceIntent1 = new Intent(this, VoiceService.class);
+        startService(serviceIntent1);*/
 
         //Set global action bar
         ActionBar actionBar = getSupportActionBar();

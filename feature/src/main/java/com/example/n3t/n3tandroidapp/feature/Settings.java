@@ -8,19 +8,38 @@ import android.widget.Button;
 
 public class Settings extends AppCompatActivity {
 
-    Button personalProfile;
+    Button personalProfile, voiceOption;
+    static boolean voiceOn = false;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        intent = new Intent(Settings.this, VoiceService.class);
         personalProfile = (Button)findViewById(R.id.personal_profile);
+        voiceOption = (Button)findViewById(R.id.voice_option);
 
         personalProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Settings.this, PersonalProfile.class));
+            }
+        });
+
+        voiceOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(voiceOption.getText().equals("Voice Control : Off")){
+                    voiceOption.setText("Voice Control : On");
+                    voiceOn = true;
+                    startService(intent);
+                } else if(voiceOption.getText().equals("Voice Control : On")){
+                    voiceOption.setText("Voice Control : Off");
+                    stopService(intent);
+                    voiceOn = false;
+                }
             }
         });
 

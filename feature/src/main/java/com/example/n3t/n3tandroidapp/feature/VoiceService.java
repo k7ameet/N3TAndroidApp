@@ -29,6 +29,7 @@ public class VoiceService extends Service {
     private double lat = -1000;
     private double lon = -1000;
     private Date currentDT;
+    boolean runner;
 
     private SpeechRecognizer speechRecognizer;
 
@@ -42,6 +43,8 @@ public class VoiceService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        runner = true;
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -79,7 +82,7 @@ public class VoiceService extends Service {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                while (1 == 1) {
+                while (runner) {
                     synchronized (this) {
                         try {
                             wait(60000);
@@ -92,7 +95,7 @@ public class VoiceService extends Service {
                             } else {
                                 Log.i("WIFI", "NOT CONNECTED");
                             }
-                            Log.i("VOICE SERVICE", "5 SECOND LOOP");
+                            Log.i("VOICE SERVICE", "1 MINUTE LOOP");
                         } catch (java.lang.InterruptedException e) {
                             Log.i("VOICE SERVICE", "LOOP ERROR");
                         }
@@ -103,6 +106,23 @@ public class VoiceService extends Service {
 
         Thread t = new Thread(r);
         t.start();
+
+        Runnable checker = new Runnable() {
+            @Override
+            public void run() {
+                while (runner) {
+                    synchronized (this) {
+                        try {
+                            wait(5000);
+                            Log.i("VS", "RUNNING");
+                        } catch (InterruptedException e){}
+                    }
+                }
+            }
+        };
+
+        Thread t1s = new Thread(checker);
+        t1s.start();
         return Service.START_STICKY;
 
     }
@@ -212,8 +232,19 @@ public class VoiceService extends Service {
 
     @Override
     public void onDestroy() {
+
         locationManager.removeUpdates(locationListener);
+        speechRecognizer.destroy();
+        runner = false;
+        Log.i("VS", "DESTROYED");
+        super.onDestroy();
+
     }
 
+    @Override
+    public void onCreate(){
+        super.onCreate();
+        Log.i("VS", "CREATED");
+    }
 
 }

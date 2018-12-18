@@ -162,9 +162,9 @@ public class DisplayImage extends AppCompatActivity {
                 File tempDir = Environment.getExternalStorageDirectory();
                 tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
                 FileUtils.deleteDirectory(tempDir);
-                Log.i("TEMP FILE", "DELETED");
+                //Log.i("TEMP FILE", "DELETED");
             } catch(Exception e){
-                Log.i("TEMP FILE", "NOT DELETED");
+                //Log.i("TEMP FILE", "NOT DELETED");
             }
 
 
